@@ -1,18 +1,37 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace FNVi\Messaging\Schemas;
 use FNVi\Mongo\Schema;
+use MongoDB\BSON\ObjectID;
+
 /**
- * Description of Message
+ * Represents a message to one or more users in the messages collection
  *
  * @author Joe Wheatley <joew@fnvi.co.uk>
  */
 class Message extends Schema{
-    //put your code here
+    
+    public $body;
+    public $users = [];
+    public $seen = [];
+    public $sender;
+    public $conversation;
+    public $timestamp;
+
+
+    /**
+     * 
+     * @param mixed $sender
+     * @param ObjectID $conversation
+     * @param mixed $body
+     */
+    public function __construct($sender, $conversation, $body, $to) {
+        $this->sender = $sender;
+        $this->body = $body;
+        $this->conversation = $conversation;
+        $this->timestamp = $this->timestamp();
+        $to[] = $sender;
+        $this->users = $to;
+        parent::__construct();
+    }
 }
